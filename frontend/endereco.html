@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Endereço</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">Modern store</div>
+  </nav>
+
+<h1>Endereço de Entrega</h1>
+
+<div class="login-container">
+
+  <input id="cep" placeholder="Digite o CEP">
+  <button onclick="buscarCEP()">Buscar</button>
+
+  <input id="rua" placeholder="Rua">
+  <input id="bairro" placeholder="Bairro">
+  <input id="cidade" placeholder="Cidade">
+  <input id="estado" placeholder="Estado">
+
+  <button onclick="finalizarPedido()">
+    Finalizar Pedido
+  </button>
+
+</div>
+
+<script src="endereco.js"></script>
+
+</body>
+</html>

@@ -31,25 +31,9 @@ async function login() {
 }
 
 
-// 🛒 ADICIONAR AO CARRINHO
-async function adicionarCarrinho(produto_id) {
-  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-
-  // verifica se já existe
-  const item = carrinho.find(p => p.id === produto_id);
-
-  if (item) {
-    item.quantidade++;
-  } else {
-    carrinho.push({
-      id: produto_id,
-      quantidade: 1
-    });
-  }
-
-  localStorage.setItem("carrinho", JSON.stringify(carrinho));
-
-  alert("Produto adicionado ao carrinho");
+function irPagamento(produto_id) {
+  localStorage.setItem("produtoCompra", produto_id);
+  window.location.href = "pagamento.html";
 }
 
 
@@ -90,5 +74,114 @@ async function cadastrar() {
     window.location.href = "produtos.html";
   } else {
     alert("Erro ao cadastrar");
+  }
+}
+
+function mostrarMetodo() {
+  const metodo = document.getElementById("metodo").value;
+  const area = document.getElementById("areaPagamento");
+
+  if (metodo === "PIX") {
+    area.innerHTML = `
+      <p>Escaneie o QR Code:</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX-FAKE">
+      <p>Após pagar, clique em confirmar.</p>
+    `;
+  } else if (metodo === "CARTAO") {
+    area.innerHTML = `
+      <p>Pagamento com cartão (simulado)</p>
+      <input placeholder="Número do cartão"><br>
+      <input placeholder="Nome"><br>
+      <input placeholder="CVV"><br>
+    `;
+  } else {
+    area.innerHTML = "";
+  }
+}
+
+async function confirmarPagamento() {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const produto_id = localStorage.getItem("produtoCompra");
+  const metodo = document.getElementById("metodo").value;
+
+  if (!metodo) {
+    alert("Escolha um método de pagamento");
+    return;
+  }
+
+  // cria pedido
+  const resposta = await fetch("http://localhost:3000/comprar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: usuario.email,
+      produto_id
+    })
+  });
+
+  const dados = await resposta.json();
+
+  if (!resposta.ok) {
+    alert("Erro ao criar pedido");
+    return;
+  }
+
+  const pedido_id = dados.pedido_id;
+
+  // atualiza status
+  await fetch(`http://localhost:3000/pedido/${pedido_id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      status: "APROVADO",
+      metodo_pagamento: metodo
+    })
+  });
+
+  alert("Pagamento aprovado!");
+  window.location.href = "endereco.html";
+}
+
+function mostrarMetodo() {
+  const metodo = document.getElementById("metodo").value;
+  const area = document.getElementById("areaPagamento");
+
+  if (metodo === "PIX") {
+    area.innerHTML = `
+      <p>Escaneie o QR Code:</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX-FAKE">
+      <p>Após pagar, clique em confirmar.</p>
+    `;
+  } else if (metodo === "CARTAO") {
+    area.innerHTML = `
+      <p>Pagamento com cartão (simulado)</p>
+      <input placeholder="Número do cartão">
+      <input placeholder="Nome no cartão">
+      <input placeholder="CVV">
+    `;
+  } else {
+    area.innerHTML = "";
+  }
+}
+  async function testeAPI() {
+  try {
+    const resposta = await fetch("http://localhost:3000/comprar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: "teste@email.com",
+        produto_id: 1
+      })
+    });
+
+    alert("Status: " + resposta.status);
+  } catch (erro) {
+    alert("Erro: " + erro.message);
   }
 }
