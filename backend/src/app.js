@@ -132,89 +132,83 @@ app.post("/produto", (req, res) => {
 
 
 // =======================
-//  CARRINHO 
+//  COMPRA DIRETA
 // =======================
 
-// Criar carrinho se não existir
-app.post("/carrinho", (req, res) => {
+app.post("/comprar", (req, res) => {
+  const { email, produto_id } = req.body;
 
-  
-    console.log("REQ BODY:", req.body); // 👈 AQUI
-
-  const { email, produto_id, quantidade } = req.body;
-
-  const sqlUser = "SELECT id FROM cliente WHERE email = ?";
-
-  con.query(sqlUser, [email], (err, result) => {
+  // busca usuário
+  con.query("SELECT id FROM cliente WHERE email = ?", [email], (err, userResult) => {
     if (err) return res.status(500).json({ erro: err });
 
-    if (result.length === 0) {
+    if (userResult.length === 0) {
       return res.status(404).json({ mensagem: "Usuário não encontrado" });
     }
 
-    const id_cliente = result[0].id;
+    const id_cliente = userResult[0].id;
 
-    // 1️⃣ verifica se já existe carrinho
-    const sqlCarrinho = "SELECT id FROM carrinho WHERE id_cliente = ?";
-
-    con.query(sqlCarrinho, [id_cliente], (err2, result2) => {
+    // busca produto
+    con.query("SELECT * FROM produto WHERE id = ?", [produto_id], (err2, prodResult) => {
       if (err2) return res.status(500).json({ erro: err2 });
 
-      if (result2.length === 0) {
-        // cria carrinho
-        con.query("INSERT INTO carrinho (id_cliente) VALUES (?)", [id_cliente], (err3, result3) => {
-          if (err3) return res.status(500).json({ erro: err3 });
-
-          inserirItem(result3.insertId);
-        });
-      } else {
-        inserirItem(result2[0].id);
+      if (prodResult.length === 0) {
+        return res.status(404).json({ mensagem: "Produto não encontrado" });
       }
-    });
 
-    function inserirItem(id_carrinho) {
-      const sqlItem = `
-        INSERT INTO item_carrinho (id_carrinho, id_produto, quantidade)
-        VALUES (?, ?, ?)
+      const produto = prodResult[0];
+
+      // cria pedido
+      const sqlPedido = `
+        INSERT INTO pedido (id_cliente, total)
+        VALUES (?, ?)
       `;
 
-      con.query(sqlItem, [id_carrinho, produto_id, quantidade], (err4) => {
-        if (err4) return res.status(500).json({ erro: err4 });
+      con.query(sqlPedido, [id_cliente, produto.preco], (err3, pedidoResult) => {
+        if (err3) return res.status(500).json({ erro: err3 });
 
-        res.json({ mensagem: "Produto adicionado ao carrinho" });
+        const id_pedido = pedidoResult.insertId;
+
+        // cria item do pedido
+        const sqlItem = `
+          INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario)
+          VALUES (?, ?, ?, ?)
+        `;
+
+        con.query(sqlItem, [id_pedido, produto_id, 1, produto.preco], (err4) => {
+          if (err4) return res.status(500).json({ erro: err4 });
+
+          res.json({
+            mensagem: "Compra realizada com sucesso!",
+            pedido_id: id_pedido
+          });
+        });
       });
-    }
+    });
   });
 });
 
 
-// Ver carrinho
-app.get("/carrinho/:email", (req, res) => {
-  const { email } = req.params;
+
+app.put("/pedido/:id", (req, res) => {
+  const { id } = req.params;
+  const { status, metodo_pagamento } = req.body;
 
   const sql = `
-    SELECT p.nome, p.preco, ic.quantidade
-    FROM item_carrinho ic
-    JOIN carrinho c ON ic.id_carrinho = c.id
-    JOIN cliente cl ON c.id_cliente = cl.id
-    JOIN produto p ON ic.id_produto = p.id
-    WHERE cl.email = ?
+    UPDATE pedido
+    SET status = ?, metodo_pagamento = ?
+    WHERE id = ?
   `;
 
-  con.query(sql, [email], (err, result) => {
+  con.query(sql, [status, metodo_pagamento, id], (err) => {
     if (err) return res.status(500).json({ erro: err });
 
-    if (result.length === 0) {
-      return res.json({ mensagem: "Carrinho vazio" });
-    }
-
-    res.json(result);
+    res.json({ mensagem: "Pedido atualizado" });
   });
 });
 
-
-
 //servidor
+
 
 
 app.listen(3000, () => {
