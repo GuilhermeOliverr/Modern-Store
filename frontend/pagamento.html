@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pagamento</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">Modern store</div>
+
+    <div class="menu">
+      <a href="produtos.html">Produtos</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+
+<h1>Pagamento</h1>
+
+<div class="login-container">
+
+  <h2>Escolha o método</h2>
+
+  <select id="metodo" onchange="mostrarMetodo()" style="width:100%; padding:10px;">
+    <option value="">Selecione</option>
+    <option value="PIX">PIX</option>
+    <option value="CARTAO">Cartão</option>
+  </select>
+
+  <div id="areaPagamento" style="margin-top:20px;"></div>
+
+  <button onclick="confirmarPagamento()" style="width:100%; margin-top:20px;">
+    Confirmar pagamento
+  </button>
+
+</div>
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

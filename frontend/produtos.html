@@ -11,7 +11,6 @@
 
   <div class="menu">
     <a href="produtos.html">Produtos</a>
-    <a href="carrinho.html">Carrinho</a>
     <a href="login.html">Login</a>
   </div>
   </nav>
@@ -47,8 +46,8 @@ async function carregarProdutos() {
         <img src="${p.imagem}" class="img-produto">
         <h3>${p.nome}</h3>
         <p class="preco">R$ ${p.preco}</p>
-        <button onclick="adicionarCarrinho(${p.id})">
-          Adicionar
+        <button onclick="irPagamento(${p.id})">
+          Comprar agora
         </button>
       </div>
     `;
