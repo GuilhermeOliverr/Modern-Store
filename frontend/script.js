@@ -185,3 +185,21 @@ function mostrarMetodo() {
     alert("Erro: " + erro.message);
   }
 }
+
+function mostrarUsuario() {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  if (usuario) {
+    document.getElementById("usuario-logado").innerText =
+      `${usuario.nome} (${usuario.tipo})`;
+  }
+}
+
+window.onload = mostrarUsuario;
+
+mostrarUsuario();
+
+function logout() {
+  localStorage.removeItem("usuario");
+  window.location.href = "login.html";
+}

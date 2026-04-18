@@ -97,3 +97,44 @@ input {
 .menu a:hover {
   color: #00bcd4;
 }
+
+/* container do usuário */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* botão/área do usuário */
+#usuario-logado {
+  cursor: pointer;
+  font-weight: bold;
+  color: #fbff20;
+}
+
+/* dropdown escondido */
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  padding: 15px;
+  z-index: 999;
+}
+
+/* botão sair */
+.dropdown button {
+  background: rgb(255, 28, 28);
+  border: none;
+  padding: 7px 15px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* hover mágico */
+.user-menu:hover .dropdown {
+  display: block;
+}
