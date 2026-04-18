@@ -6,7 +6,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-// 🔌 Conexão
+// Conexão
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -24,7 +24,7 @@ con.connect((err) => {
 
 
 // =======================
-// 👤 USUÁRIOS
+//  USUÁRIOS
 // =======================
 
 app.post("/usuarios", (req, res) => {
@@ -70,7 +70,7 @@ app.post("/login", (req, res) => {
 
 
 // =======================
-// 👕 PRODUTOS
+//  PRODUTOS
 // =======================
 
 
@@ -96,7 +96,7 @@ app.post("/produto", (req, res) => {
       });
     }
 
-    // 🔥 lógica da imagem
+    //  lógica da imagem
     let imagemFinal = imagem;
 
   if (!imagemFinal || imagemFinal.trim() === "") {    
@@ -132,7 +132,7 @@ app.post("/produto", (req, res) => {
 
 
 // =======================
-// 🛒 CARRINHO (CORRIGIDO)
+//  CARRINHO 
 // =======================
 
 // Criar carrinho se não existir
@@ -213,9 +213,9 @@ app.get("/carrinho/:email", (req, res) => {
 });
 
 
-// =======================
-// 🚀 SERVIDOR
-// =======================
+
+//servidor
+
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");

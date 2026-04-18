@@ -1,4 +1,4 @@
-// 🔐 LOGIN
+// LOGIN
 async function login() {
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
@@ -21,7 +21,7 @@ async function login() {
   if (resposta.ok) {
     alert("Login OK");
 
-    // 🔥 salva usuário completo
+    // salva usuário completo
     localStorage.setItem("usuario", JSON.stringify(dados.usuario));
 
     window.location.href = "produtos.html";
@@ -53,7 +53,7 @@ async function adicionarCarrinho(produto_id) {
 }
 
 
-// 🔗 NAVEGAÇÃO
+// NAVEGAÇÃO
 
 
 function irCadastro() {
@@ -65,7 +65,7 @@ function irLogin() {
 }
 
 
-// 🧾 CADASTRO (AGORA COM AUTO LOGIN)
+// CADASTRO (AGORA COM AUTO LOGIN)
 async function cadastrar() {
   const nome = document.getElementById("nome").value;
   const email = document.getElementById("email").value;
@@ -84,7 +84,7 @@ async function cadastrar() {
   if (resposta.ok) {
     alert("Conta criada com sucesso!");
 
-    // 🔥 login automático (não precisa voltar pro login)
+    // login automático (não precisa voltar pro login)
     localStorage.setItem("usuario", JSON.stringify({ email }));
 
     window.location.href = "produtos.html";
