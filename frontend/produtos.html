@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Produtos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+  <div class="logo">Modern store</div>
+
+  <div class="menu">
+    <a href="produtos.html">Produtos</a>
+    <a href="carrinho.html">Carrinho</a>
+    <a href="login.html">Login</a>
+  </div>
+  </nav>
+
+<h1>Modern Store</h1>
+
+
+
+<div id="lista" class="grid"></div>
+
+<script src="script.js"></script>
+
+<script>
+    const usuario = localStorage.getItem("usuario");
+
+if (!usuario) {
+  window.location.href = "login.html";
+}
+async function carregarProdutos() {
+  const resposta = await fetch("http://localhost:3000/produto");
+  const produtos = await resposta.json();
+
+  const div = document.getElementById("lista");
+
+  div.innerHTML = ""; // limpa antes de carregar
+
+  produtos.forEach(p => {
+
+    console.log("ID DO PRODUTO:", p.id); // 👈 AQUI
+
+    div.innerHTML += `
+      <div class="card">
+        <img src="${p.imagem}" class="img-produto">
+        <h3>${p.nome}</h3>
+        <p class="preco">R$ ${p.preco}</p>
+        <button onclick="adicionarCarrinho(${p.id})">
+          Adicionar
+        </button>
+      </div>
+    `;
+  });
+}
+
+carregarProdutos();
+</script>
+
+</body>
+</html>

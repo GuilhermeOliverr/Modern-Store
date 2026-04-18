@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Carrinho</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <nav class="navbar">
+  <div class="logo"> Modern Store</div>
+
+  <div class="menu">
+    <a href="produtos.html">Produtos</a>
+    <a href="carrinho.html">Carrinho</a>
+    <a href="login.html">Login</a>
+  </div>
+  </nav>
+</header>
+
+<h1>Seu Carrinho</h1>
+
+<div id="carrinho"></div>
+
+<script>
+async function carregarCarrinho() {
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+  const resposta = await fetch("http://localhost:3000/produto");
+  const produtos = await resposta.json();
+
+  const div = document.getElementById("carrinho");
+
+  if (carrinho.length === 0) {
+    div.innerHTML = "<p>Carrinho vazio</p>";
+    return;
+  }
+
+  let total = 0;
+
+  carrinho.forEach(item => {
+    const produto = produtos.find(p => p.id === item.id);
+
+    total += produto.preco * item.quantidade;
+
+    div.innerHTML += `
+      <div class="card">
+        <h3>${produto.nome}</h3>
+        <p>Quantidade: ${item.quantidade}</p>
+        <p>Preço: R$ ${produto.preco}</p>
+      </div>
+    `;
+  });
+
+  div.innerHTML += `<h2>Total: R$ ${total}</h2>`;
+}
+
+carregarCarrinho();
+</script>
+
+</body>
+</html>
