@@ -69,7 +69,11 @@ async function cadastrar() {
     alert("Conta criada com sucesso!");
 
     // login automático (não precisa voltar pro login)
-    localStorage.setItem("usuario", JSON.stringify({ email }));
+    localStorage.setItem("usuario", JSON.stringify({
+      nome,
+      email,
+      tipo: "CLIENTE"
+    }));localStorage.setItem("usuario", JSON.stringify({ email }));
 
     window.location.href = "produtos.html";
   } else {
@@ -167,24 +171,6 @@ function mostrarMetodo() {
     area.innerHTML = "";
   }
 }
-  async function testeAPI() {
-  try {
-    const resposta = await fetch("http://localhost:3000/comprar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: "teste@email.com",
-        produto_id: 1
-      })
-    });
-
-    alert("Status: " + resposta.status);
-  } catch (erro) {
-    alert("Erro: " + erro.message);
-  }
-}
 
 function mostrarUsuario() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -197,7 +183,7 @@ function mostrarUsuario() {
 
 window.onload = mostrarUsuario;
 
-mostrarUsuario();
+
 
 function logout() {
   localStorage.removeItem("usuario");
