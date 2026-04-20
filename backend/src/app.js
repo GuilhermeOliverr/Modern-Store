@@ -48,7 +48,7 @@ app.get("/usuarios", (req, res) => {
 });
 
 
-// LOGIN
+
 app.post("/login", (req, res) => {
   const { email, senha } = req.body;
 
@@ -69,9 +69,6 @@ app.post("/login", (req, res) => {
 });
 
 
-// =======================
-//  PRODUTOS
-// =======================
 
 
 app.get("/produto", (req, res) => {
@@ -131,14 +128,12 @@ app.post("/produto", (req, res) => {
 });
 
 
-// =======================
-//  COMPRA DIRETA
-// =======================
+
 
 app.post("/comprar", (req, res) => {
   const { email, produto_id } = req.body;
 
-  // busca usuário
+
   con.query("SELECT id FROM cliente WHERE email = ?", [email], (err, userResult) => {
     if (err) return res.status(500).json({ erro: err });
 
@@ -148,7 +143,6 @@ app.post("/comprar", (req, res) => {
 
     const id_cliente = userResult[0].id;
 
-    // busca produto
     con.query("SELECT * FROM produto WHERE id = ?", [produto_id], (err2, prodResult) => {
       if (err2) return res.status(500).json({ erro: err2 });
 
@@ -158,7 +152,7 @@ app.post("/comprar", (req, res) => {
 
       const produto = prodResult[0];
 
-      // cria pedido
+
       const sqlPedido = `
         INSERT INTO pedido (id_cliente, total)
         VALUES (?, ?)
@@ -169,7 +163,7 @@ app.post("/comprar", (req, res) => {
 
         const id_pedido = pedidoResult.insertId;
 
-        // cria item do pedido
+      
         const sqlItem = `
           INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario)
           VALUES (?, ?, ?, ?)
@@ -213,4 +207,16 @@ app.put("/pedido/:id", (req, res) => {
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
+});
+
+app.delete("/produto/:id", (req, res) => {
+  const { id } = req.params;
+
+  const sql = "DELETE FROM produto WHERE id = ?";
+
+  con.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ erro: err });
+
+    res.json({ mensagem: "Produto deletado com sucesso" });
+  });
 });

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Painel Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Modern store</div>
+
+      <div class="menu">
+
+      <div class="user-menu">
+       <span id="usuario-logado"></span>
+
+      <div class="dropdown">
+        <button onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <a href="produtos.html">Produtos</a>
+    <a href="login.html">Login</a>
+
+  </div>
+ </nav>
+
+<h1>Painel do Administrador</h1>
+
+<div class="login-container">
+
+  <h2>Cadastrar Produto</h2>
+
+  <input type="text" id="nome" placeholder="Nome do produto">
+  <input type="number" id="preco" placeholder="Preço">
+  <input type="number" id="estoque" placeholder="Estoque">
+  <input type="text" id="imagem" placeholder="URL da imagem (opcional)">
+
+  
+
+  <button onclick="cadastrarProduto()">Cadastrar</button>
+
+</div>
+<h2>Produtos cadastrados</h2>
+<div id="lista-produtos-admin"></div>
+
+<script src="script.js"></script>
+<script src="admin.js"></script>
+
+<script>
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  if (!usuario || usuario.tipo !== "ADMIN") {
+    alert("Acesso negado");
+    window.location.href = "produtos.html";
+  }
+</script>
+
+</body>
+</html>
