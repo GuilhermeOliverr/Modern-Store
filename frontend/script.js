@@ -1,3 +1,5 @@
+const MODO_APRESENTACAO = true;
+
 // LOGIN
 async function login() {
   const email = document.getElementById("email").value;

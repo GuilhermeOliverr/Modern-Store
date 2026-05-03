@@ -1,10 +1,10 @@
 async function cadastrarProduto() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-  if (!usuario || usuario.tipo !== "ADMIN") {
-    alert("Apenas admin pode cadastrar");
-    return;
-  }
+  if (!MODO_APRESENTACAO && (!usuario || usuario.tipo !== "ADMIN")) {
+  alert("Apenas admin pode cadastrar");
+  return;
+}
 
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;

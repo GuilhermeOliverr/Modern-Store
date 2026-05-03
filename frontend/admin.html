@@ -50,9 +50,9 @@
 <script>
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-  if (!usuario || usuario.tipo !== "ADMIN") {
-    alert("Acesso negado");
-    window.location.href = "produtos.html";
+  if (!MODO_APRESENTACAO && (!usuario || usuario.tipo !== "ADMIN")) {
+  alert("Acesso negado");
+  window.location.href = "produtos.html";
   }
 </script>
 

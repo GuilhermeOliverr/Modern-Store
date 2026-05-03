@@ -21,6 +21,8 @@
 
     <a href="produtos.html">Produtos</a>
     <a href="admin.html">Painel ADM</a>
+    <a href = "endereco.html"> Endereço </a>
+    <a href = "login.html"> Login </a>
 
   </div>
  </nav>
@@ -36,7 +38,7 @@
 <script>
     const usuario = localStorage.getItem("usuario");
 
-if (!usuario) {
+if (!MODO_APRESENTACAO && !usuario) {
   window.location.href = "login.html";
 }
 async function carregarProdutos() {
